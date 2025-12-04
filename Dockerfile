@@ -1,29 +1,37 @@
-FROM python:3.11-slim
+# Use Python 3.10 (mediapipe + opencv-contrib are happiest here)
+FROM python:3.10-slim
 
-# Install system-level dependencies required by OpenCV
+ENV PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
+
+# System deps for OpenCV, mediapipe, video, etc.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1 \
     libglib2.0-0 \
     libsm6 \
     libxext6 \
     libxrender1 \
-    build-essential \
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-# Set work directory
 WORKDIR /app
 
-# Copy requirements first (for cache efficiency)
+# Install Python dependencies
 COPY requirements.txt .
 
-RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir gunicorn
+# (Optional but recommended) avoid NumPy 2.x ABI issues:
+# If you hit NumPy-related crashes, change your requirements line to:
+# numpy==1.26.4
+RUN pip install --no-cache-dir -r requirements.txt \
+    && pip install --no-cache-dir gunicorn
 
-# Copy the entire project
+# Copy the project (templates, static, data, etc.)
 COPY . .
 
-# Expose Flask/Gunicorn port
-EXPOSE 5000
+# Railway injects PORT; default to 8000 locally
+ENV PORT=8000
 
-# Run the server (edit app:app if your Flask instance is different)
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
+EXPOSE 8000
+
+# app.py contains `app = Flask(__name__)`, so we use app:app
+CMD ["sh", "-c", "gunicorn app:app --workers 2 --timeout 180 --bind 0.0.0.0:${PORT}"]
