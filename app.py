@@ -358,10 +358,19 @@ def api_capture():
     if not username:
         return jsonify(ok=False, msg="username required"), 400
 
-    cam = get_camera()
-    ok, frame = cam.read()
-    if not ok:
-        return jsonify(ok=False, msg="camera read failed"), 500
+    # 1) Try to read frame from browser upload
+    img_file = request.files.get("frame")
+    frame = None
+    if img_file:
+        data = np.frombuffer(img_file.read(), np.uint8)
+        frame = cv.imdecode(data, cv.IMREAD_COLOR)
+
+    # 2) Fallback: server-side camera (for local dev)
+    if frame is None:
+        cam = get_camera()
+        ok, frame = cam.read()
+        if not ok:
+            return jsonify(ok=False, msg="camera read failed"), 500
 
     roi, box, _ = prepare_face_roi(frame)
     if roi is None:
@@ -370,7 +379,6 @@ def api_capture():
     user_dir = FACES_DIR / username
     user_dir.mkdir(parents=True, exist_ok=True)
 
-    # Count existing to keep sequence
     existing = sorted([p for p in user_dir.glob("img_*.jpg")])
     count = len(existing) + 1
     out_path = user_dir / f"img_{count:04d}.jpg"
@@ -432,16 +440,24 @@ def api_auth():
     labels = load_labels()
     inv_labels = {v: k for k, v in labels.items()}
 
-    cam = get_camera()
-    ok, frame = cam.read()
-    if not ok:
-        return jsonify(ok=False, msg="camera read failed"), 500
+    # 1) Try frame uploaded from browser
+    img_file = request.files.get("frame")
+    frame = None
+    if img_file:
+        data = np.frombuffer(img_file.read(), np.uint8)
+        frame = cv.imdecode(data, cv.IMREAD_COLOR)
+
+    # 2) Fallback: server-side camera (local dev)
+    if frame is None:
+        cam = get_camera()
+        ok, frame = cam.read()
+        if not ok:
+            return jsonify(ok=False, msg="camera read failed"), 500
 
     roi, box, _ = prepare_face_roi(frame)
     if roi is None:
         return jsonify(ok=True, matched=False, username="(no face)", confidence=999.0)
 
-    # Predict (LBPH: lower confidence = better)
     pred_label, conf = model.predict(roi)
     name = inv_labels.get(int(pred_label), "unknown")
 
@@ -449,10 +465,16 @@ def api_auth():
     if matched:
         session.permanent = True
         session["user"] = name
-        return jsonify(ok=True, matched=True, username=name, confidence=float(conf), redirect=url_for("dashboard"))
+        return jsonify(
+            ok=True,
+            matched=True,
+            username=name,
+            confidence=float(conf),
+            redirect=url_for("dashboard"),
+        )
 
     return jsonify(ok=True, matched=False, username=name, confidence=float(conf))
-
+# ----------------------------
 @app.route("/measure/video_feed")
 @login_required
 def m1_video_feed():
@@ -2274,4 +2296,4 @@ def module7_task3_video_feed():
 # ----------------------------
 if __name__ == "__main__":
     # For local dev
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", "5001")), debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", "5000")), debug=True)
