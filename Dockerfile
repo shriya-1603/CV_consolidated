@@ -17,9 +17,8 @@ RUN pip install --no-cache-dir -r requirements.txt gunicorn
 # Copy the rest of the project
 COPY . .
 
-# Railway provides PORT dynamically
-ENV PORT=8000
+# Internal port
 EXPOSE 8000
 
-# Start server
-CMD ["sh", "-c", "gunicorn app:app --workers 1 --threads 4 --timeout 120 --bind 0.0.0.0:${PORT:-8000}"]
+# 🚫 No shell, no ${PORT} – just bind to 8000 inside the container
+CMD ["gunicorn", "app:app", "--workers", "1", "--threads", "4", "--timeout", "120", "--bind", "0.0.0.0:8000"]
