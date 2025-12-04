@@ -10,17 +10,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # App directory
 WORKDIR /app
 
-# Install Python deps (and gunicorn explicitly)
+# Install Python deps + gunicorn
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt gunicorn
 
 # Copy the rest of the project
 COPY . .
 
-# Railway will set PORT, but keep a fallback for local runs
+# Railway provides PORT dynamically
 ENV PORT=8000
-
 EXPOSE 8000
 
-# Shell-form so ${PORT} is expanded by the shell
-CMD gunicorn app:app --bind "0.0.0.0:${PORT}"
+# Start server
+CMD ["sh", "-c", "gunicorn app:app --workers 1 --threads 4 --timeout 120 --bind 0.0.0.0:${PORT:-8000}"]
