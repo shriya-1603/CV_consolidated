@@ -32,3 +32,6 @@ EXPOSE 5000
 # Run the app
 # Make sure app.py calls app.run(host="0.0.0.0", port=5000)
 CMD ["python", "app.py"]
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt \
+    && pip install --no-cache-dir gunicorn
