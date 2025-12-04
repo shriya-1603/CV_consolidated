@@ -1,25 +1,29 @@
-# Use Python 3.10
-FROM python:3.10-slim
+FROM python:3.11-slim
 
-# System deps for OpenCV / MediaPipe
+# Install system-level dependencies required by OpenCV
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1 \
     libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender1 \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# App directory
+# Set work directory
 WORKDIR /app
 
-# Install Python deps + gunicorn
+# Copy requirements first (for cache efficiency)
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt gunicorn
 
-# Copy the rest of the project
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir gunicorn
+
+# Copy the entire project
 COPY . .
 
-# We will just listen on 8000 inside the container
-ENV PORT=8000
-EXPOSE 8000
+# Expose Flask/Gunicorn port
+EXPOSE 5000
 
-# Exec-form CMD (no shell, no $PORT interpolation needed)
-CMD ["gunicorn", "app:app", "--workers", "1", "--threads", "4", "--timeout", "120", "--bind", "0.0.0.0:8000"]
+# Run the server (edit app:app if your Flask instance is different)
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
