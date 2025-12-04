@@ -3,6 +3,13 @@
 
 const API_BASE = "/measure";
 
+// add:
+const videoCanvas      = document.getElementById("videoCanvas");
+const videoCtx         = videoCanvas.getContext("2d");
+
+
+let localStream      = null;
+
 // UI elements
 const toggleBtn        = document.getElementById("toggleBtn");
 const captureCalibBtn  = document.getElementById("captureCalibBtn");
@@ -37,20 +44,48 @@ let loadedImageBitmap = null;
 // ---- helpers ----
 function measureMode() { return "perspective"; }
 
-function refreshStream() {
-  // bust cache param so <img> always refreshes
-  videoFeed.src = API_BASE + "/video_feed?ts=" + Date.now();
+async function startLocalCamera() {
+  if (localStream) return;  // already running
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: false
+    });
+    localStream = stream;
+    videoFeed.srcObject = stream;
+  } catch (e) {
+    console.error("getUserMedia failed", e);
+    alert("Unable to access camera. Check browser permissions.");
+    cameraOn = false;
+    setUI();
+  }
+}
+
+function stopLocalCamera() {
+  if (localStream) {
+    localStream.getTracks().forEach(t => t.stop());
+    localStream = null;
+  }
+  if (videoFeed) {
+    videoFeed.srcObject = null;
+  }
 }
 
 function setUI() {
-  toggleBtn.textContent         = cameraOn ? "Turn Camera Off" : "Turn Camera On";
-  statusBar.textContent         = cameraOn ? "Camera is ON" : "Camera is OFF";
-  videoBox.style.display        = cameraOn ? "block" : "none";
-  captureCalibBtn.disabled      = !cameraOn;
-  captureImgBtn.disabled        = !cameraOn;
+  toggleBtn.textContent    = cameraOn ? "Turn Camera Off" : "Turn Camera On";
+  statusBar.textContent    = cameraOn ? "Camera is ON" : "Camera is OFF";
+  videoBox.style.display   = cameraOn ? "block" : "none";
+  captureCalibBtn.disabled = !cameraOn;
+  captureImgBtn.disabled   = !cameraOn;
 
-  if (cameraOn) refreshStream(); else videoFeed.src = "";
+  if (cameraOn) {
+    startLocalCamera();
+  } else {
+    stopLocalCamera();
+  }
 }
+
 
 async function getStatus() {
   try {
@@ -81,19 +116,55 @@ async function toggleCamera() {
 
 async function capture(mode) {
   try {
+    if (!cameraOn || !localStream) {
+      alert("Camera is not ON.");
+      return;
+    }
+
+    // Ensure we have valid video dimensions
+    const vw = videoFeed.videoWidth;
+    const vh = videoFeed.videoHeight;
+    if (!vw || !vh) {
+      alert("Camera not ready yet, try again in a moment.");
+      return;
+    }
+
+    // Draw current frame to hidden canvas
+    videoCanvas.width  = vw;
+    videoCanvas.height = vh;
+    videoCtx.drawImage(videoFeed, 0, 0, vw, vh);
+
+    // Convert canvas to JPEG blob
+    const blob = await new Promise((resolve) =>
+      videoCanvas.toBlob(resolve, "image/jpeg", 0.9)
+    );
+    if (!blob) {
+      alert("Failed to capture frame");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("frame", blob, "frame.jpg");
+
     lastSave.textContent = "";
     const res = await fetch(API_BASE + `/capture?mode=${encodeURIComponent(mode)}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" }
+      body: formData
     });
+
     const data = await res.json();
-    if (!data.ok) { alert(data.error || "Capture failed"); return; }
+    if (!data.ok) {
+      alert(data.error || "Capture failed");
+      return;
+    }
+
     lastSave.textContent = `Saved: ${data.path}`;
   } catch (e) {
     console.error(e);
     alert("Capture failed");
   }
 }
+
 
 async function runCalibration() {
   try {

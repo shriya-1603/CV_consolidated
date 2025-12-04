@@ -501,15 +501,28 @@ def m1_capture():
     """
     ?mode=calib | img
     Saves the current frame to calib/ or captures/ respectively.
+    Accepts either:
+      - uploaded frame from browser ('frame' file)  ✅ for deployed app
+      - fallback to server webcam                  ✅ for local dev
     """
     mode = (request.args.get("mode") or "").lower()
     if mode not in ("calib", "img"):
         return jsonify(ok=False, error="invalid mode"), 400
 
-    cam = get_camera()
-    ok, frame = cam.read()
-    if not ok:
-        return jsonify(ok=False, error="camera read failed"), 500
+    frame = None
+
+    # 1) Try browser-uploaded frame
+    img_file = request.files.get("frame")
+    if img_file:
+        data = np.frombuffer(img_file.read(), np.uint8)
+        frame = cv.imdecode(data, cv.IMREAD_COLOR)
+
+    # 2) Fallback to server-side camera (useful for localhost)
+    if frame is None:
+        cam = get_camera()
+        ok, frame = cam.read()
+        if not ok:
+            return jsonify(ok=False, error="camera read failed"), 500
 
     ts = int(time.time() * 1000)
     if mode == "calib":

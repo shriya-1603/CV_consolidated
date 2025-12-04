@@ -18,8 +18,13 @@
         </div>
         <div id="statusBar" class="muted">Camera is OFF</div>
         <div id="videoBox" class="video-wrap">
-            <img id="videoFeed" alt="camera stream will appear here" />
-        </div>
+    <!-- Live browser camera -->
+    <video id="videoFeed" autoplay playsinline></video>
+
+    <!-- Hidden canvas just for captures -->
+    <canvas id="videoCanvas" width="1280" height="720" style="display:none;"></canvas>
+</div>
+
         <div id="lastSave" class="ok"></div>
     </section>
 
