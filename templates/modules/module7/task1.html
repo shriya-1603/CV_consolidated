@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Module 7 – Task 1 · Stereo Size Estimation{% endblock %}
+
+{% block extra_head %}
+  <!-- JS only for this task -->
+  <script defer src="{{ url_for('static', filename='module7/main.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+
+<h1 class="h1">Task 1 – Stereo Object Size Estimation</h1>
+<p class="muted">
+  Upload a left and right stereo image, click corresponding points on both images,
+  then compute an approximate real-world width / height.
+</p>
+
+<!-- Upload form -->
+<form method="post" enctype="multipart/form-data" class="card" style="margin-bottom: 16px;">
+  <h2 style="margin-top: 0;">Upload Stereo Pair</h2>
+
+  <div class="grid" style="gap: 12px;">
+    <div class="form-group">
+      <label for="left_image">Left Image</label>
+      <input type="file" id="left_image" name="left_image" accept="image/*" required>
+    </div>
+    <div class="form-group">
+      <label for="right_image">Right Image</label>
+      <input type="file" id="right_image" name="right_image" accept="image/*" required>
+    </div>
+  </div>
+
+  <button type="submit" class="btn" style="margin-top: 8px;">Upload Stereo Pair</button>
+
+  {% if message %}
+    <p class="muted" style="margin-top: 8px;">{{ message }}</p>
+  {% else %}
+    <p class="muted" style="margin-top: 8px;">
+      No stereo pair uploaded yet. Please choose a left and right image and click <strong>Upload Stereo Pair</strong>.
+    </p>
+  {% endif %}
+</form>
+
+<!-- Stereo Images Row -->
+<div class="m7-stereo-row" {% if not left_url or not right_url %}style="display:none;"{% endif %}>
+  <div class="m7-stereo-col">
+    <h3 class="m7-img-title">Left Image</h3>
+    <div class="m7-img-wrapper">
+      <img id="m7-img-left"
+           src="{{ left_url or '' }}"
+           class="m7-stereo-img"
+           alt="Left stereo image">
+      <div id="m7-overlay-left" class="m7-overlay"></div>
+    </div>
+    <p id="m7-left-clicks" class="m7-click-log">0 points selected</p>
+  </div>
+
+  <div class="m7-stereo-col">
+    <h3 class="m7-img-title">Right Image</h3>
+    <div class="m7-img-wrapper">
+      <img id="m7-img-right"
+           src="{{ right_url or '' }}"
+           class="m7-stereo-img"
+           alt="Right stereo image">
+      <div id="m7-overlay-right" class="m7-overlay"></div>
+    </div>
+    <p id="m7-right-clicks" class="m7-click-log">0 points selected</p>
+  </div>
+</div>
+
+<div class="grid m7-task-grid">
+  <!-- Inputs -->
+  <section class="card m7-task-card">
+    <h2>Inputs</h2>
+
+    <div class="form-group">
+      <label for="m7-shape">Shape</label>
+      <select id="m7-shape">
+        <option value="rectangle">Rectangle (4 points)</option>
+        <option value="circle">Circle (2 points)</option>
+        <option value="polygon">Polygon (N points)</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Left Points</label>
+      <textarea id="m7-points-left" rows="5" readonly></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Right Points</label>
+      <textarea id="m7-points-right" rows="5" readonly></textarea>
+    </div>
+
+    <div class="m7-button-row">
+      <button class="btn" id="m7-btn-measure" type="button">Compute Size</button>
+      <button class="btn ghost" id="m7-btn-reset" type="button">Reset Points</button>
+    </div>
+
+    <div id="m7-task1-error" class="error" style="display:none;"></div>
+  </section>
+
+  <!-- Result -->
+  <section class="card m7-task-card">
+    <h2>Result</h2>
+    <div id="m7-task1-result" class="m7-result-box">
+      <p class="muted">No measurement yet. Select points and click <strong>Compute Size</strong>.</p>
+    </div>
+  </section>
+</div>
+
+<div style="margin-top:16px;">
+  <a href="{{ url_for('module_7') }}" class="btn ghost">← Back to Module 7</a>
+</div>
+
+{% endblock %}

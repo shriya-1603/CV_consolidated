@@ -1,0 +1,527 @@
+/* --- Layout shell --- */
+:root {
+  --bg: #050816;
+  --bg-elevated: #0b1220;
+  --bg-panel: #020617;
+  --border-subtle: rgba(148, 163, 184, 0.28);
+  --accent: #22c55e;
+  --accent-soft: rgba(34, 197, 94, 0.12);
+  --text: #e5e7eb;
+  --text-soft: #9ca3af;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.7);
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Inter", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* Center the whole app and avoid it becoming too wide */
+body.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background: radial-gradient(circle at top left, #0b1120, #020617 60%);
+  color: var(--text);
+  font-family: var(--font-sans);
+  justify-content: center;       /* center main content horizontally */
+}
+
+/* --- Sidebar --- */
+
+.sidebar {
+  width: 260px;
+  background: radial-gradient(circle at top left, #020617, #020617 45%, #020617);
+  border-right: 1px solid rgba(15, 23, 42, 0.85);
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 8px 18px;
+}
+
+.logo-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #22c55e, #22d3ee);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: #020617;
+  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.6);
+}
+
+.logo-title {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.logo-subtitle {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--text-soft);
+}
+
+.sidebar-nav {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nav-link {
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  color: var(--text-soft);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.nav-link:hover {
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--text);
+  transform: translateX(2px);
+}
+
+.nav-link--disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.nav-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 12px 10px;
+  font-size: 11px;
+  color: var(--text-soft);
+  border-top: 1px solid rgba(15, 23, 42, 0.9);
+}
+
+.sidebar-caption {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 4px;
+  color: #6ee7b7;
+  font-size: 10px;
+}
+
+.sidebar-meta {
+  opacity: 0.8;
+}
+
+/* --- Main column --- */
+
+.main-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 26px;
+  gap: 16px;
+  max-width: 1200px;     /* hard cap on content width */
+}
+
+/* Top bar */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topbar-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.topbar-subtitle {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  font-size: 11px;
+  color: #bbf7d0;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+/* --- Content surface / panels --- */
+
+.content-surface {
+  flex: 1;
+  background: radial-gradient(circle at top left, #020617, #020617 55%, #020617);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(15, 23, 42, 0.9);
+  box-shadow: var(--shadow-soft);
+  padding: 22px 22px 24px;
+  overflow: auto;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panel-header--space {
+  gap: 12px;
+}
+
+.panel-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.panel-subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.panel-body {
+  margin-top: 4px;
+}
+
+.panel-body--split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.panel-body--layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.1fr);
+  gap: 20px;
+}
+
+.section-title {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* --- Video blocks (small, constrained) --- */
+
+.video-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Generic video frame used in modules */
+.video-frame {
+  width: 100%;
+  max-width: 720px;               /* cap width for any big videos */
+  aspect-ratio: 16 / 9;           /* keep a nice ratio */
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(15, 23, 42, 0.9);
+  background: #020617;
+}
+
+.video-frame img,
+.video-frame video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;            /* avoid zoomed-in crop */
+}
+
+/* Login/Register/Module1 live feed wrapper */
+.video-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 14px 0 10px;
+}
+
+/* Apply to BOTH #stream (login/register) and #videoFeed (Module 1)
+   because both sit inside .video-wrap */
+.video-wrap img,
+.video-wrap video {
+  display: block;
+  width: 100%;
+  max-width: 480px;               /* << smaller, YouTube-like width */
+  aspect-ratio: 16 / 9;           /* consistent video proportion */
+  border-radius: 18px;
+  border: 1px solid rgba(15, 23, 42, 0.9);
+  background: #000;
+  object-fit: contain;            /* no stretching */
+}
+
+.caption {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-soft);
+}
+
+/* --- Forms / actions --- */
+
+.form-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field-label {
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+.input {
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  background: #020617;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+}
+
+.input:focus {
+  border-color: var(--accent);
+}
+
+/* Buttons */
+
+.btn {
+  border-radius: 999px;
+  border: 1px solid transparent;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--text);
+  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.btn:hover {
+  background: #0f172a;
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #22c55e, #22d3ee);
+  color: #020617;
+  box-shadow: 0 12px 30px rgba(34, 197, 94, 0.7);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 16px 50px rgba(34, 197, 94, 0.9);
+}
+
+.btn-secondary {
+  background: rgba(15, 23, 42, 0.95);
+  border-color: var(--border-subtle);
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: rgba(148, 163, 184, 0.25);
+}
+
+.btn-wide {
+  width: 100%;
+  max-width: 260px;
+}
+
+.divider {
+  border: none;
+  border-top: 1px dashed rgba(30, 64, 175, 0.7);
+  margin: 14px 0;
+}
+
+.status-line {
+  font-size: 12px;
+}
+
+/* --- Dashboard modules --- */
+
+.modules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.module-card {
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(30, 64, 175, 0.7);
+  text-decoration: none;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 12px;
+  transition: border 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
+}
+
+.module-card:hover {
+  transform: translateY(-2px);
+  border-color: #22c55e;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.8);
+}
+
+.module-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #a5b4fc;
+}
+
+.module-title {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.module-desc {
+  color: var(--text-soft);
+  font-size: 11px;
+}
+
+.video-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.video-card {
+  background: rgba(15, 23, 42, 0.95);
+  border-radius: 16px;
+  border: 1px solid rgba(30, 64, 175, 0.7);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.video-card-header {
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+.video-card video {
+  border-radius: 10px;
+}
+
+/* --- Misc --- */
+
+.muted {
+  color: var(--text-soft);
+}
+
+.small {
+  font-size: 11px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 960px) {
+  body.app-shell {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sidebar {
+    flex-direction: row;
+    width: 100%;
+    padding: 10px 18px;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .main-column {
+    padding: 14px;
+    max-width: 100%;
+  }
+
+  .panel-body--split,
+  .panel-body--layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* On mobile, still respect the 480px max but let it shrink naturally */
+  .video-wrap img,
+  .video-wrap video {
+    max-width: 100%;
+  }
+}

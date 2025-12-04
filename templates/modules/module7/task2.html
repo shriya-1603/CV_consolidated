@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Module 7 – Task 2 · Uncalibrated Stereo Derivation{% endblock %}
+
+{% block content %}
+<h1 class="h1">Task 2 – Uncalibrated Stereo (Hand Derivation)</h1>
+<p class="muted">
+  Below is the scanned PDF of your handwritten derivation.
+</p>
+
+<div class="m7-pdf-wrapper">
+  <iframe
+    class="m7-pdf-frame"
+    src="{{ url_for('static', filename='module7/7b.pdf') }}"
+    title="Task 2 Derivation PDF"
+  ></iframe>
+</div>
+
+<div style="margin-top:16px;">
+  <a href="{{ url_for('module_7') }}" class="btn ghost">← Back to Module 7</a>
+</div>
+{% endblock %}

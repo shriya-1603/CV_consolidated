@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Module 3 — Task 3 · Object Boundary Extraction{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='module3/style.css') }}">
+{% endblock %}
+
+{% block content %}
+  <h1 class="h1">Task 3 — Object Boundary Detection</h1>
+  <p class="muted">
+    Classical CV pipeline: blur → Canny → morphology → largest contour. The final boundary is drawn as an overlay.
+  </p>
+
+  <section class="card">
+    <div class="grid" style="grid-template-columns: 1fr 1fr; gap:16px;">
+      <!-- Upload new images and run Task 3 -->
+      <form action="{{ url_for('module3_task', num=3) }}" method="post" enctype="multipart/form-data" class="upload-form">
+        <input type="hidden" name="action" value="upload">
+        <label class="label">Upload images</label>
+        <input class="file" type="file" name="images" multiple accept="image/*" required>
+        <div style="margin-top:8px;">
+          <button class="btn" type="submit">Upload &amp; Run</button>
+        </div>
+      </form>
+
+      <!-- Re-run on your current dataset in /uploads -->
+      <form action="{{ url_for('module3_task', num=3) }}" method="post" class="rerun-form">
+        <input type="hidden" name="action" value="rerun">
+        <p class="muted" style="margin:0 0 8px;">Use existing dataset in <code>uploads/</code>.</p>
+        <button class="btn" type="submit">Run on existing data</button>
+      </form>
+    </div>
+  </section>
+
+  {% if results %}
+    <h3 class="h1" style="font-size:20px;margin-top:16px;">Results</h3>
+    <div class="results" style="grid-template-columns: repeat(auto-fill,minmax(280px,1fr));">
+      {% for item in results %}
+        <div class="card img-card">
+          <div class="img-title">{{ item.original_name }}</div>
+
+          <div class="muted" style="margin:6px 0 4px;">Detected boundary (overlay)</div>
+          <img src="{{ url_for('static', filename=item.boundary_rel) }}" alt="Boundary overlay">
+
+          <div class="muted" style="margin:10px 0 4px;">Intermediate edges after Canny + cleanup</div>
+          <img src="{{ url_for('static', filename=item.edges_rel) }}" alt="Edges map">
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div style="margin-top:16px;">
+    <a class="btn ghost" href="{{ url_for('module3_dashboard') }}">← Back to Module 3</a>
+  </div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Module 7 – Stereo Vision & Pose{% endblock %}
+
+{% block content %}
+
+<h2 style="margin-bottom: 10px;">Module 7 — Stereo Vision Webapp</h2>
+<p class="muted">Select a task to begin.</p>
+
+<div class="modules-wrap">
+  <div class="modules-grid-2x2">
+
+    <!-- Task 1 -->
+    <a href="{{ url_for('module7_task1') }}" class="module-card">
+      <div class="module-number">Task 1</div>
+      <div class="module-desc">
+        Stereo-based object size estimation using left/right images.
+      </div>
+    </a>
+
+    <!-- Task 2 -->
+    <a href="{{ url_for('module7_task2') }}" class="module-card">
+      <div class="module-number">Task 2</div>
+      <div class="module-desc">
+        View your handwritten derivation for uncalibrated stereo.
+      </div>
+    </a>
+
+    <!-- Task 3 -->
+    <a href="{{ url_for('module7_task3') }}" class="module-card">
+      <div class="module-number">Task 3</div>
+      <div class="module-desc">
+        Real-time pose &amp; hand tracking with CSV logging.
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<div style="margin-top:20px; text-align:center;">
+  <a href="{{ url_for('dashboard') }}" class="btn ghost">← Back to Main Dashboard</a>
+</div>
+
+{% endblock %}

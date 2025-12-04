@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Module 3 — Task 2 · Edge & Corner Detection{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='module3/style.css') }}">
+{% endblock %}
+
+{% block content %}
+  <h1 class="h1">Task 2 — Edge &amp; Corner Detection</h1>
+  <p class="muted">
+    Detect keypoints labeled as <span style="color:red;">EDGE</span> and
+    <span style="color:lime;">CORNER</span> based on simple gradient and Harris methods.
+  </p>
+
+  <section class="card">
+    <div class="grid" style="grid-template-columns: 1fr 1fr; gap:16px;">
+      <!-- Upload & run -->
+      <form action="{{ url_for('module3_task', num=2) }}" method="post" enctype="multipart/form-data" class="upload-form">
+        <input type="hidden" name="action" value="upload">
+        <label class="label">Upload images</label>
+        <input class="file" type="file" name="images" multiple accept="image/*" required>
+        <div style="margin-top:8px;">
+          <button class="btn" type="submit">Upload &amp; Run</button>
+        </div>
+      </form>
+
+      <!-- Re-run on existing dataset -->
+      <form action="{{ url_for('module3_task', num=2) }}" method="post" class="rerun-form">
+        <input type="hidden" name="action" value="rerun">
+        <p class="muted" style="margin:0 0 8px;">Use existing dataset in <code>uploads/</code>.</p>
+        <button class="btn" type="submit">Run on existing data</button>
+      </form>
+    </div>
+  </section>
+
+  {% if results %}
+    <h3 class="h1" style="font-size:20px;margin-top:16px;">Results</h3>
+    <div class="results" style="grid-template-columns: repeat(auto-fill,minmax(280px,1fr));">
+      {% for item in results %}
+        <div class="card img-card">
+          <div class="img-title">{{ item.original_name }}</div>
+
+          <div class="muted" style="margin:6px 0 4px;">Edge keypoints (Red)</div>
+          <img src="{{ url_for('static', filename=item.edges_rel) }}" alt="Edges">
+
+          <div class="muted" style="margin:10px 0 4px;">Corner keypoints (Green)</div>
+          <img src="{{ url_for('static', filename=item.corners_rel) }}" alt="Corners">
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div style="margin-top:16px;">
+    <a class="btn ghost" href="{{ url_for('module3_dashboard') }}">← Back to Module 3</a>
+  </div>
+{% endblock %}

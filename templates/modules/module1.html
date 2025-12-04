@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Module 1 — Calibrate & Measure{% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='module1/style.css') }}">
+{% endblock %}
+
+{% block content %}
+<div id="wrap">
+    <h1>Camera Calibrate &amp; Measure</h1>
+
+    <section class="card">
+        <h2>Camera</h2>
+        <div class="row">
+            <button id="toggleBtn" class="btn">Turn Camera On</button>
+            <button id="captureCalibBtn" class="btn" disabled>Capture Chessboard</button>
+            <button id="captureImgBtn" class="btn" disabled>Capture Object Image</button>
+        </div>
+        <div id="statusBar" class="muted">Camera is OFF</div>
+        <div id="videoBox" class="video-wrap">
+            <img id="videoFeed" alt="camera stream will appear here" />
+        </div>
+        <div id="lastSave" class="ok"></div>
+    </section>
+
+    <section class="card">
+        <h2>Calibration</h2>
+        <div class="row">
+            <label>Rows (inner corners):</label>
+            <input type="number" id="rows" value="6">
+            <label>Cols (inner corners):</label>
+            <input type="number" id="cols" value="9">
+            <label>Square size (mm):</label>
+            <input type="number" id="square" value="25">
+            <button id="calibrateBtn" class="btn">Run Calibration</button>
+        </div>
+        <div id="calibStatus" class="muted"></div>
+    </section>
+
+    <section class="card">
+        <h2>Measure</h2>
+        <div class="row">
+            <input type="hidden" name="mode" value="perspective">
+            <label>Z distance:</label>
+            <input type="number" id="zInput" value="500" step="1">
+            <span class="muted">(same units you want as output)</span>
+        </div>
+        <div class="row">
+            <button id="refreshListBtn" class="btn">Refresh Captures</button>
+            <select id="imageSelect"></select>
+            <button id="loadImageBtn" class="btn">Load Image</button>
+        </div>
+
+        <canvas id="measureCanvas" width="800" height="450"></canvas>
+
+        <div class="row">
+            <button id="clearPointsBtn" class="btn">Clear Points</button>
+            <button id="measureBtn" class="btn">Measure Distance</button>
+        </div>
+
+        <div id="measureResult" class="ok"></div>
+    </section>
+
+    <div class="row" style="justify-content:flex-start; margin-top: 12px;">
+        <a class="btn" href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='module1/main.js') }}"></script>
+{% endblock %}

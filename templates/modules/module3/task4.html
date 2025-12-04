@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Module 3 — Task 4 · ArUco-based Segmentation{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='module3/style.css') }}">
+{% endblock %}
+
+{% block content %}
+  <h1 class="h1">Task 4 — Segmentation with ArUco Markers</h1>
+  <p class="muted">
+    Detect ArUco markers placed along the object boundary, build a convex hull from all marker corners,
+    and produce a binary mask + overlay.
+  </p>
+
+  <section class="card">
+    <div class="grid" style="grid-template-columns: 1fr 1fr; gap:16px;">
+      <!-- Upload & run -->
+      <form action="{{ url_for('module3_task', num=4) }}" method="post" enctype="multipart/form-data" class="upload-form">
+        <input type="hidden" name="action" value="upload">
+        <label class="label">Upload images (with ArUco markers on boundary)</label>
+        <input class="file" type="file" name="images" multiple accept="image/*" required>
+        <div style="margin-top:8px;">
+          <button class="btn" type="submit">Upload &amp; Run</button>
+        </div>
+      </form>
+
+      <!-- Re-run on existing dataset -->
+      <form action="{{ url_for('module3_task', num=4) }}" method="post" class="rerun-form">
+        <input type="hidden" name="action" value="rerun">
+        <p class="muted" style="margin:0 0 8px;">Run on existing dataset in <code>uploads/</code>.</p>
+        <button class="btn" type="submit">Run on existing data</button>
+      </form>
+    </div>
+  </section>
+
+  {% if results %}
+    <h3 class="h1" style="font-size:20px;margin-top:16px;">Results</h3>
+    <div class="results" style="grid-template-columns: repeat(auto-fill,minmax(280px,1fr));">
+      {% for item in results %}
+        <div class="card img-card">
+          <div class="img-title">{{ item.original_name }}</div>
+
+          <div class="muted" style="margin:6px 0 4px;">Detected markers (debug)</div>
+          <img src="{{ url_for('static', filename=item.markers_rel) }}" alt="Markers">
+
+          {% if item.hull_rel %}
+            <div class="muted" style="margin:10px 0 4px;">Hull overlay (blue) with semi-transparent fill</div>
+            <img src="{{ url_for('static', filename=item.hull_rel) }}" alt="Hull overlay">
+
+            <div class="muted" style="margin:10px 0 4px;">Binary mask</div>
+            <img src="{{ url_for('static', filename=item.mask_rel) }}" alt="Mask">
+          {% else %}
+            <p class="muted" style="margin-top:10px;">Hull/Mask unavailable (insufficient markers).</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div style="margin-top:16px;">
+    <a class="btn ghost" href="{{ url_for('module3_dashboard') }}">← Back to Module 3</a>
+  </div>
+{% endblock %}

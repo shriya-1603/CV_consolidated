@@ -1,0 +1,46 @@
+/* ==== Module 3 Tile Layout ==== */
+
+.task-grid,
+.modules-grid-2x2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+    margin-top: 20px;
+}
+
+/* ==== Task Tile Card ==== */
+
+.task-card,
+.module-card {
+    background: #1b1b1b;
+    border: 1px solid #2c2c2c;
+    border-radius: 10px;
+    padding: 18px;
+    text-decoration: none;
+    color: #fff;
+    display: block;
+    transition: 0.25s ease;
+    box-shadow: 0 0 14px rgba(0,0,0,0.25);
+    cursor: pointer;
+}
+
+.task-card:hover,
+.module-card:hover {
+    transform: translateY(-3px);
+    border-color: #4da3ff;
+    box-shadow: 0 0 18px rgba(77,163,255,0.4);
+}
+
+/* Tile title */
+.module-number {
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+/* Tile description */
+.module-desc {
+    font-size: 14px;
+    opacity: 0.8;
+    line-height: 1.45;
+}

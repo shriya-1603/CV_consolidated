@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Vision Console{% endblock %}
+{% block content %}
+
+<section class="panel">
+  <header class="panel-header panel-header--space">
+    <div>
+      <h2 class="panel-title">Welcome, {{ user }}</h2>
+      <p class="panel-subtitle">Choose a computer vision module or review quick demos.</p>
+    </div>
+    <a href="{{ url_for('logout') }}" class="btn btn-ghost">Logout</a>
+  </header>
+
+  <!-- Main 2-column layout: video demos on the right, module shortcuts on the left -->
+  <div class="panel-body panel-body--layout">
+    <div class="module-column">
+      <h3 class="section-title">Modules</h3>
+      <p class="muted small">Jump directly into any module.</p>
+
+      <div class="modules-grid">
+        <a href="{{ url_for('module_n', n=1) }}" class="module-card">
+          <div class="module-label">Module 1</div>
+          <div class="module-title">Face Login &amp; Calibration</div>
+          <div class="module-desc">Perspective measurement with calibrated camera.</div>
+        </a>
+
+        <a href="{{ url_for('module_n', n=2) }}" class="module-card">
+          <div class="module-label">Module 2</div>
+          <div class="module-title">Detect → Blur → Deblur</div>
+          <div class="module-desc">Template matching, blur control &amp; Wiener deblurring.</div>
+        </a>
+
+        <a href="{{ url_for('module3_dashboard') }}" class="module-card">
+          <div class="module-label">Module 3</div>
+          <div class="module-title">Edges, Corners &amp; ArUco</div>
+          <div class="module-desc">Gradient maps, keypoints and marker segmentation.</div>
+        </a>
+
+        <a href="{{ url_for('module_n', n=4) }}" class="module-card">
+          <div class="module-label">Module 4</div>
+          <div class="module-title">Panorama &amp; SIFT-lite</div>
+          <div class="module-desc">Image stitching and custom SIFT-like descriptors.</div>
+        </a>
+
+        <a href="{{ url_for('module_n', n=5) }}" class="module-card">
+          <div class="module-label">Module 5</div>
+          <div class="module-title">PDF Viewer</div>
+          <div class="module-desc">In-browser viewer for CV reports and notes.</div>
+        </a>
+
+        <a href="{{ url_for('module_n', n=6) }}" class="module-card">
+          <div class="module-label">Module 6</div>
+          <div class="module-title">Real-time Trackers</div>
+          <div class="module-desc">Marker, markerless, and SAM2-based tracking.</div>
+        </a>
+
+        <a href="{{ url_for('module_n', n=7) }}" class="module-card">
+          <div class="module-label">Module 7</div>
+          <div class="module-title">Stereo Size &amp; Pose</div>
+          <div class="module-desc">Stereo size estimate, pose &amp; hands with logging.</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="video-column">
+      <h3 class="section-title">Demo videos</h3>
+      <p class="muted small">Short previews of each module.</p>
+
+      <div class="video-grid">
+        <div class="video-card">
+          <div class="video-card-header">Module 1</div>
+          <video controls preload="metadata">
+            <source src="{{ url_for('static', filename='videos/module1_demo.mp4') }}" type="video/mp4">
+          </video>
+        </div>
+
+        <div class="video-card">
+          <div class="video-card-header">Module 2</div>
+          <video controls preload="metadata">
+            <source src="{{ url_for('static', filename='videos/module2_demo.mp4') }}" type="video/mp4">
+          </video>
+        </div>
+
+        <div class="video-card">
+          <div class="video-card-header">Module 3</div>
+          <video controls preload="metadata">
+            <source src="{{ url_for('static', filename='videos/module3_demo.mp4') }}" type="video/mp4">
+          </video>
+        </div>
+
+        <div class="video-card">
+          <div class="video-card-header">Module 4</div>
+          <video controls preload="metadata">
+            <source src="{{ url_for('static', filename='videos/module4_demo.mp4') }}" type="video/mp4">
+          </video>
+        </div>
+
+        <div class="video-card">
+          <div class="video-card-header">Module 5</div>
+          <video controls preload="metadata">
+            <source src="{{ url_for('static', filename='videos/module5_demo.mp4') }}" type="video/mp4">
+          </video>
+        </div>
+
+        <div class="video-card">
+          <div class="video-card-header">Module 6</div>
+          <video controls preload="metadata">
+            <source src="{{ url_for('static', filename='videos/module6_demo.mp4') }}" type="video/mp4">
+          </video>
+        </div>
+
+        <div class="video-card">
+          <div class="video-card-header">Module 7</div>
+          <video controls preload="metadata">
+            <source src="{{ url_for('static', filename='videos/module7_demo.mp4') }}" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

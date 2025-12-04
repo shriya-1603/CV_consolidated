@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Vision Console — Computer Vision Lab{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block extra_head %}{% endblock %}
+  </head>
+  <body class="app-shell">
+    <!-- Side navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-badge">CV</div>
+        <div class="logo-text">
+          <div class="logo-title">Vision Console</div>
+          <div class="logo-subtitle">REAL-TIME CV LAB</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="{{ url_for('index') }}" class="nav-link">
+          <span class="nav-dot"></span>
+          <span>Home</span>
+        </a>
+
+        <a href="{{ url_for('login') }}" class="nav-link">
+          <span class="nav-dot"></span>
+          <span>Face Login</span>
+        </a>
+
+        <a href="{{ url_for('register') }}" class="nav-link">
+          <span class="nav-dot"></span>
+          <span>Register Face</span>
+        </a>
+
+        {# Dashboard only clickable if authenticated #}
+        {% if session.get('is_authenticated') %}
+          <a href="{{ url_for('dashboard') }}" class="nav-link">
+            <span class="nav-dot"></span>
+            <span>Dashboard</span>
+          </a>
+        {% else %}
+          <button class="nav-link nav-link--disabled" type="button" title="Authenticate to unlock">
+            <span class="nav-dot"></span>
+            <span>Dashboard (locked)</span>
+          </button>
+        {% endif %}
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-caption">Computer Vision Project</div>
+        <div class="sidebar-meta">Real-time streams • Tracking • Analysis</div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <div class="main-column">
+      <header class="topbar">
+        <div>
+          <h1 class="topbar-title">Computer Vision Control Panel</h1>
+          <p class="topbar-subtitle">Manage modules, streams and experiments in your browser.</p>
+        </div>
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          <span id="camera-status-label">Camera ready</span>
+        </div>
+      </header>
+
+      <main class="content-surface">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

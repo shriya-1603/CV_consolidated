@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Module 6 – Real-Time Tracking{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='module6/style.css') }}">
+{% endblock %}
+
+{% block content %}
+  <div class="page-head">
+    <h1 class="h1">Module 6: Real-Time Tracking Demo</h1>
+    <a class="btn ghost" href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+  </div>
+
+  <p class="muted">
+    Switch between ArUco marker-based tracking, markerless feature tracking (optical flow),
+    and SAM2 segmentation playback.
+  </p>
+
+  <div class="card">
+    <div class="m6-controls">
+      <button class="btn" data-mode="marker">Marker-based</button>
+      <button class="btn ghost" data-mode="markerless">Markerless</button>
+      <button class="btn ghost" data-mode="sam2">SAM2 segmentation</button>
+    </div>
+
+    <div class="m6-video-box">
+      <!-- Live webcam (marker + markerless) -->
+      <img
+        id="m6_webcam"
+        class="m6-video"
+        src="{{ url_for('module6_video_feed') }}"
+        alt="Tracking stream (webcam)"
+      >
+
+      <!-- SAM2 segmented frames (static fetch) -->
+      <img
+        id="m6_sam2"
+        class="m6-video"
+        src="{{ url_for('module6_sam2_frame', frame_id=0) }}"
+        alt="SAM2 frame"
+        style="display:none;"
+      >
+
+      <div id="m6_sam2_controls" class="m6-sam2-controls" style="display:none;">
+        <button class="btn ghost" data-action="prev">⏪ Prev</button>
+        <button class="btn ghost" data-action="play">▶️ Play</button>
+        <button class="btn ghost" data-action="next">⏩ Next</button>
+        <button class="btn ghost" data-action="restart">🔁 Restart</button>
+
+        <input id="m6_slider" type="range" min="0" max="198" value="0">
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='module6/main.js') }}"></script>
+{% endblock %}

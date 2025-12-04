@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Module 4 — Dashboard{% endblock %}
+
+{% block content %}
+<div id="wrap">
+  <h1>Module 4 Dashboard</h1>
+  <p class="muted">Choose a task to begin.</p>
+
+  <section class="card">
+    <div class="modules-wrap">
+      <div class="modules-grid-2x2">
+
+        <!-- Task 1 -->
+        <a href="{{ url_for('module_4_task1') }}" class="module-card">
+          <div class="module-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M4 12h16M4 6h16M4 18h16" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="module-number">Task 1</div>
+          <div class="module-desc">Image Stitching + Panorama Comparison</div>
+        </a>
+
+        <!-- Task 2 -->
+        <a href="{{ url_for('module_4_task2') }}" class="module-card">
+          <div class="module-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="12" cy="12" r="9" stroke-width="1.5"/>
+              <path d="M9 12h6" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="module-number">Task 2</div>
+          <div class="module-desc">My SIFT vs OpenCV SIFT</div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="row" style="margin-top:12px;">
+    <a class="btn" href="{{ url_for('dashboard') }}">← Back to Main Dashboard</a>
+  </div>
+</div>
+{% endblock %}

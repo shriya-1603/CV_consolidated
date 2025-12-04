@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Module 5 – PDFs{% endblock %}
+
+{% block content %}
+  <h2 style="margin-bottom: 10px;">Module 5</h2>
+  <p class="muted">Choose a document to view.</p>
+
+  <div class="modules-wrap">
+    <div class="modules-grid-2x2">
+      <!-- PDF 1 tile -->
+      <a href="{{ url_for('module_5_doc', doc_id=1) }}" class="module-card">
+        <div class="module-icon" aria-hidden="true">
+          <!-- Simple document icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M6 3h8l4 4v14H6z" stroke-width="1.5"/>
+            <path d="M14 3v5h5" stroke-width="1.5" opacity=".7"/>
+          </svg>
+        </div>
+        <div class="module-number">Document 1</div>
+        <div class="module-desc">Open one.pdf</div>
+      </a>
+
+      <!-- PDF 2 tile -->
+      <a href="{{ url_for('module_5_doc', doc_id=2) }}" class="module-card">
+        <div class="module-icon" aria-hidden="true">
+          <!-- Another doc icon variant -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <rect x="5" y="3" width="14" height="18" rx="2" stroke-width="1.5"/>
+            <path d="M8 8h8M8 12h5M8 16h6" stroke-width="1.5" opacity=".7"/>
+          </svg>
+        </div>
+        <div class="module-number">Document 2</div>
+        <div class="module-desc">Open two.pdf</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 16px;">
+    <a class="btn" href="{{ url_for('dashboard') }}">← Back to main dashboard</a>
+  </div>
+{% endblock %}

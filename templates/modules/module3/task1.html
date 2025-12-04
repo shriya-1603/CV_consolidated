@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Module 3 — Task 1 · Gradients & LoG{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='module3/style.css') }}">
+{% endblock %}
+
+{% block content %}
+  <h1 class="h1">Task 1 — Gradient Magnitude, Gradient Angle, LoG</h1>
+  <p class="muted">
+    Upload ~10 images of the same object (different angles/distances), or re-run on the dataset already stored in <code>uploads/</code>.
+  </p>
+
+  <section class="card">
+    <div class="grid" style="grid-template-columns: 1fr 1fr; gap:16px;">
+      <!-- Form 1: upload new images -->
+      <form action="{{ url_for('module3_task', num=1) }}" method="post" enctype="multipart/form-data" class="upload-form">
+        <input type="hidden" name="action" value="upload">
+        <label class="label">Upload images</label>
+        <input class="file" type="file" name="images" multiple accept="image/*" required>
+        <div style="margin-top:8px;">
+          <button class="btn" type="submit">Upload &amp; Process</button>
+        </div>
+      </form>
+
+      <!-- Form 2: re-run on existing ones -->
+      <form action="{{ url_for('module3_task', num=1) }}" method="post" class="rerun-form">
+        <input type="hidden" name="action" value="rerun">
+        <p class="muted" style="margin:0 0 8px;">Already uploaded images in <code>uploads/</code>?</p>
+        <button class="btn" type="submit">Re-run on existing dataset</button>
+      </form>
+    </div>
+  </section>
+
+  {% if results %}
+    <h3 class="h1" style="font-size:20px;margin-top:16px;">Processed Results</h3>
+    <div class="results" style="grid-template-columns: repeat(auto-fill,minmax(260px,1fr));">
+      {% for item in results %}
+        <div class="card img-card">
+          <div class="img-title">{{ item.original_name }}</div>
+
+          <div class="muted" style="margin:6px 0 4px;">Gradient Magnitude</div>
+          <img src="{{ url_for('static', filename=item.grad_mag_rel) }}" alt="Gradient magnitude">
+
+          <div class="muted" style="margin:10px 0 4px;">Gradient Angle</div>
+          <img src="{{ url_for('static', filename=item.grad_ang_rel) }}" alt="Gradient angle">
+
+          <div class="muted" style="margin:10px 0 4px;">Laplacian of Gaussian</div>
+          <img src="{{ url_for('static', filename=item.log_rel) }}" alt="LoG">
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div style="margin-top:16px;">
+    <a class="btn ghost" href="{{ url_for('module3_dashboard') }}">← Back to Module 3</a>
+  </div>
+{% endblock %}

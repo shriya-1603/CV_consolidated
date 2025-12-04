@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Module 4 • Task 2 — SIFT (lite) + RANSAC{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='module4/style.css') }}">
+{% endblock %}
+
+{% block content %}
+<div id="wrap">
+  <div class="page-head" style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+    <h1 class="h1">Task 2 : SIFT (lite) + RANSAC</h1>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a class="btn" href="{{ url_for('module_4') }}">← Back to Module 4</a>
+      <a class="btn ghost" href="{{ url_for('dashboard') }}">Main Dashboard</a>
+    </div>
+  </div>
+
+  <section class="card">
+    <p class="muted">
+      Lightweight SIFT (one octave, DoG extrema, 128-D descriptor). <br>
+      Matches via Lowe ratio; homography via RANSAC. Also compares with OpenCV SIFT if present.
+    </p>
+
+    <form method="post" enctype="multipart/form-data">
+      <div class="row" style="flex-wrap:wrap;gap:24px;">
+        <div class="col">
+          <label class="label" for="img1">Image 1</label>
+          <input id="img1" class="file" type="file" name="img1" accept="image/*" required>
+        </div>
+        <div class="col">
+          <label class="label" for="img2">Image 2</label>
+          <input id="img2" class="file" type="file" name="img2" accept="image/*" required>
+        </div>
+      </div>
+      <button class="btn" type="submit">Extract &amp; Match</button>
+    </form>
+
+    {% if notes %}
+      <div class="flash" style="margin-top:12px">
+        {% for n in notes %}<div class="flash-item">{{ n }}</div>{% endfor %}
+      </div>
+    {% endif %}
+  </section>
+
+  {% if metrics %}
+  <section class="card">
+    <h3 style="margin:0 0 8px">Metrics</h3>
+    <ul class="muted">
+      {% for k,v in metrics.items() %}
+        <li><strong>{{ k }}</strong>: {{ v }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <section class="results">
+    {% if result_ours %}
+    <div class="card img-card">
+      <div class="img-title">Our SIFT (lite) + RANSAC</div>
+      <img src="{{ url_for('mod4_file', rel=result_ours) }}" alt="ours matches"
+           style="max-width:100%;border:1px solid #444;border-radius:8px;">
+    </div>
+    {% endif %}
+
+    {% if result_cv %}
+    <div class="card img-card">
+      <div class="img-title">OpenCV SIFT + RANSAC</div>
+      <img src="{{ url_for('mod4_file', rel=result_cv) }}" alt="cv matches"
+           style="max-width:100%;border:1px solid #444;border-radius:8px;">
+    </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='module4/main.js') }}"></script>
+{% endblock %}

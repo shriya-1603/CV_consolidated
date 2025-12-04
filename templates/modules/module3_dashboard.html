@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Module 3 – Image Processing{% endblock %}
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='module3/style.css') }}">
+{% endblock %}
+
+{% block content %}
+
+  <h2 style="margin-bottom: 10px;">Module 3 — Image Processing</h2>
+  <p class="muted">Select a task to run its pipeline.</p>
+
+  <div class="task-grid">
+
+    <!-- Task 1 -->
+    <a href="{{ url_for('module3_task', num=1) }}" class="task-card">
+      <div class="module-number">Task 1 – Gradients &amp; LoG</div>
+      <div class="module-desc">
+        Sobel gradients, magnitude / angle, and Laplacian-of-Gaussian maps.
+      </div>
+    </a>
+
+    <!-- Task 2 -->
+    <a href="{{ url_for('module3_task', num=2) }}" class="task-card">
+      <div class="module-number">Task 2 – Edges &amp; Corners</div>
+      <div class="module-desc">
+        Simple gradient-based edge points (red) and Harris corners (green).
+      </div>
+    </a>
+
+    <!-- Task 3 -->
+    <a href="{{ url_for('module3_task', num=3) }}" class="task-card">
+      <div class="module-number">Task 3 – Boundary Detection</div>
+      <div class="module-desc">
+        Blur → Canny → morphology → largest contour as object boundary.
+      </div>
+    </a>
+
+    <!-- Task 4 -->
+    <a href="{{ url_for('module3_task', num=4) }}" class="task-card">
+      <div class="module-number">Task 4 – ArUco Segmentation</div>
+      <div class="module-desc">
+        Detect ArUco / QR markers, build convex hull, mask + overlay.
+      </div>
+    </a>
+
+    <!-- Task 5 (external demo) -->
+    <a href="{{ url_for('module3_task', num=5) }}" class="task-card">
+      <div class="module-number">Task 5 – SAM 2 Demo (External)</div>
+      <div class="module-desc">
+        Opens the official Segment Anything demo in a new tab.
+      </div>
+    </a>
+
+  </div>
+
+  <div style="margin-top: 20px; text-align: center;">
+    <a href="{{ url_for('dashboard') }}" class="btn">← Back to Main Dashboard</a>
+  </div>
+
+{% endblock %}

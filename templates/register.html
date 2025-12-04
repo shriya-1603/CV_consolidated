@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Register Face — Vision Console{% endblock %}
+{% block content %}
+
+<section class="panel">
+  <header class="panel-header">
+    <div>
+      <h2 class="panel-title">Register Face</h2>
+      <p class="panel-subtitle">
+        Capture a short sequence of images that will be used to train your face model.
+      </p>
+    </div>
+  </header>
+
+  <div class="panel-body panel-body--split">
+    <div class="form-panel">
+      <form id="regForm" class="form-grid" onsubmit="return false;">
+        <label class="field">
+          <span class="field-label">Username</span>
+          <input id="username" class="input" placeholder="Enter username">
+        </label>
+
+        <label class="field">
+          <span class="field-label">Frames to capture</span>
+          <input id="num" class="input" type="number" min="5" max="25" value="10">
+        </label>
+
+        <button class="btn btn-primary" onclick="startCapture()">Start Capture</button>
+      </form>
+
+      <p id="status" class="muted status-line">
+        Captured: <span id="count">0</span>
+      </p>
+
+      <button class="btn btn-secondary" onclick="trainModel()">Train Model</button>
+      <p id="trainMsg" class="muted status-line"></p>
+    </div>
+
+    <div class="video-panel">
+      <div class="video-frame">
+        <img id="stream" src="{{ url_for('video_feed') }}" alt="video stream">
+      </div>
+      <p class="caption">Live camera feed</p>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
